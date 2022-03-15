@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>My Todo List</title>
 </head>
 <body>
-    
+    <header>
+        <h1>鄭's TodoList</h1>
+    </header>
+    <main>
+        <section id="card-content">
+            <div id="upper-bar"></div>
+        
+            <div class="card-list">
+                <!-- <div class="card"><button type="button" class="delete-button"></button></div> -->
+                <button class="card to-add-card">
+                <div type="button" id="card-list-button"></div>
+                </button>
+            </div>
+        </section>
+    </main>
+    <footer></footer>
+    <script src="./js/card.js"></script>
 </body>
 </html>
