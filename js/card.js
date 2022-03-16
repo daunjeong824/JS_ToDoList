@@ -13,7 +13,6 @@ const saveCard = (cards) => {
 }
 
 const makeCard = () => {
-    
     newCardObj = {
         todo: new Array(),
         id : count
@@ -46,6 +45,11 @@ const paintCard = (newCardObj) => {
     cardForm.appendChild(cardFormInput);
     div.appendChild(cardForm);
     cardForm.addEventListener("submit",handleTodo);
+    
+    /* Card Todo-list */
+    // 만약 카드에 todo가 존재하면 렌더링, 아니면 ul 생성.
+    const ul = document.createElement("ul");
+    div.appendChild(ul);
 
     /* Card insert */
     cardList.insertBefore(div, toAddCard);
@@ -62,7 +66,9 @@ const deleteCard = (event) => {
 const handleTodo = (event) => {
     event.preventDefault();
     let newTodo = event.target.querySelector("input").value;
+    event.target.querySelector("input").value = "";
     const toPutCardCount = event.target.parentElement.id;
+    console.log(toPutCardCount);
     newTodoObj = {
         text: newTodo,
         parent: toPutCardCount,
@@ -70,8 +76,40 @@ const handleTodo = (event) => {
     }
     let gotchaCard = cards.filter(card => card.id === parseInt(toPutCardCount))[0];
     gotchaCard.todo[gotchaCard.todo.length] = newTodoObj;
-    //paintTodo(newTodoObj);
+    paintTodo(newTodoObj);
     saveCard(cards);
+}
+
+const deleteTodo = (event) => {
+    const toDeleteTodo = event.target.parentElement;
+    const toDeleteCardId = toDeleteTodo.parentElement.id;
+    //1. 해당 부모 card 선택
+    let toDeleteTodoCard = cards.filter(card => card.id === parseInt(toDeleteCardId))[0];
+    toDeleteTodo.remove(); 
+
+    //2. 부모 card에서 해당 todo 지우기
+    toDeleteTodoCard.todo = toDeleteTodoCard.todo.filter(todo => todo.id !== parseInt(toDeleteTodo.id));
+    //3. 지운 부모 card를 id 통해 cards로 갱신
+    const cardIndex = cards.findIndex((card => card.id === parseInt(toDeleteTodoCard.id)));
+    cards[cardIndex] = toDeleteTodoCard;
+
+    saveCard(cards);
+}
+
+const paintTodo = (newTodoObj) => {
+    const parentCard = document.getElementById(newTodoObj.parent);
+    const li = document.createElement("li");
+    li.id = newTodoObj.id;
+    const span = document.createElement("span");
+    const button = document.createElement("button");
+
+    button.innerText = "🗑"
+    button.addEventListener("click", deleteTodo);
+    span.innerText = newTodoObj.text;
+
+    li.appendChild(span);
+    li.appendChild(button);
+    parentCard.appendChild(li);
 }
 
 toAddCard.addEventListener("click", makeCard);
