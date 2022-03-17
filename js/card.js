@@ -4,7 +4,8 @@ const cardList = document.querySelector(".card-list");
 const deleteButton = document.querySelector(".delete-button");
 
 const CARDS_KEY = "CARDS";
-let count = 0; // 임시 변수
+const COUNT_KEY = "counts";
+let count = 0;
 let cards = [];
 
 /* Card Func */
@@ -18,11 +19,11 @@ const makeCard = () => {
         id : count
     }
     count += 1;
+    localStorage.setItem(COUNT_KEY, count);
     cards.push(newCardObj);
 
    paintCard(newCardObj);
    saveCard(cards);
-
 };
 
 const paintCard = (newCardObj) => {
@@ -47,7 +48,7 @@ const paintCard = (newCardObj) => {
     cardForm.addEventListener("submit",handleTodo);
     
     /* Card Todo-list */
-    // 만약 카드에 todo가 존재하면 렌더링, 아니면 ul 생성.
+    // <구현> 만약 카드에 todo가 존재하면 렌더링, 아니면 ul 생성.
     const ul = document.createElement("ul");
     div.appendChild(ul);
 
@@ -68,7 +69,6 @@ const handleTodo = (event) => {
     let newTodo = event.target.querySelector("input").value;
     event.target.querySelector("input").value = "";
     const toPutCardCount = event.target.parentElement.id;
-    console.log(toPutCardCount);
     newTodoObj = {
         text: newTodo,
         parent: toPutCardCount,
@@ -82,11 +82,12 @@ const handleTodo = (event) => {
 
 const deleteTodo = (event) => {
     const toDeleteTodo = event.target.parentElement;
-    const toDeleteCardId = toDeleteTodo.parentElement.id;
+    console.log(toDeleteTodo);
+    const toDeleteCardId = toDeleteTodo.parentElement.parentElement.id;
+    console.log(toDeleteCardId);
     //1. 해당 부모 card 선택
     let toDeleteTodoCard = cards.filter(card => card.id === parseInt(toDeleteCardId))[0];
     toDeleteTodo.remove(); 
-
     //2. 부모 card에서 해당 todo 지우기
     toDeleteTodoCard.todo = toDeleteTodoCard.todo.filter(todo => todo.id !== parseInt(toDeleteTodo.id));
     //3. 지운 부모 card를 id 통해 cards로 갱신
@@ -98,6 +99,7 @@ const deleteTodo = (event) => {
 
 const paintTodo = (newTodoObj) => {
     const parentCard = document.getElementById(newTodoObj.parent);
+    const cardUl = parentCard.children[2];
     const li = document.createElement("li");
     li.id = newTodoObj.id;
     const span = document.createElement("span");
@@ -109,12 +111,18 @@ const paintTodo = (newTodoObj) => {
 
     li.appendChild(span);
     li.appendChild(button);
-    parentCard.appendChild(li);
+    cardUl.appendChild(li);
 }
 
 toAddCard.addEventListener("click", makeCard);
-
+/* Load Cards & count */
 const savedCards = localStorage.getItem(CARDS_KEY);
+const savedCount = localStorage.getItem(COUNT_KEY);
+
+if(savedCount !== null) {
+    parsedCount = JSON.parse(savedCount);
+    count = parsedCount;
+};
 if (savedCards !== null) {
     parsedCard = JSON.parse(savedCards);
     cards = parsedCard;
