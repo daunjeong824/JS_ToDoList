@@ -48,7 +48,6 @@ const paintCard = (newCardObj) => {
     cardForm.addEventListener("submit",handleTodo);
     
     /* Card Todo-list */
-    // <구현> 만약 카드에 todo가 존재하면 렌더링, 아니면 ul 생성.
     const ul = document.createElement("ul");
     div.appendChild(ul);
 
@@ -99,7 +98,7 @@ const deleteTodo = (event) => {
 
 const paintTodo = (newTodoObj) => {
     const parentCard = document.getElementById(newTodoObj.parent);
-    const cardUl = parentCard.children[2];
+    const cardUl = parentCard.getElementsByTagName("ul")[0];
     const li = document.createElement("li");
     li.id = newTodoObj.id;
     const span = document.createElement("span");
@@ -126,5 +125,12 @@ if(savedCount !== null) {
 if (savedCards !== null) {
     parsedCard = JSON.parse(savedCards);
     cards = parsedCard;
-    cards.forEach(paintCard);
+
+    cards.forEach(card => {
+        paintCard(card)
+        if(card.todo.length !== 0){
+            const todoList = card.todo;
+            todoList.forEach(todo => paintTodo(todo));
+        }
+    });
 }
