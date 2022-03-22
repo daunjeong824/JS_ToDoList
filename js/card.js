@@ -42,7 +42,7 @@ const paintCard = (newCardObj) => {
     const cardFormInput = document.createElement("input");
     cardFormInput.required = true;
     cardFormInput.type = "text";
-    cardFormInput.placeholder = "Put todo";
+    cardFormInput.placeholder = "Write toDos...";
     cardForm.appendChild(cardFormInput);
     div.appendChild(cardForm);
     cardForm.addEventListener("submit",handleTodo);

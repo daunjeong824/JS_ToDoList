@@ -4,6 +4,11 @@
     box-sizing: border-box;
     margin: 0;
 }
+/* Body */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing: -0.015em;
+}
 
 /* Header */
 body header{
@@ -16,5 +21,12 @@ body header{
     background-color: #6AB5CD;
 
     margin-bottom: 35px;
+    display: flex;
+    justify-content: space-between;
+    
 }
 
+#clock {
+    transform: translate(-10px, 15%);
+
+}
