@@ -80,10 +80,8 @@ const handleTodo = (event) => {
 }
 
 const deleteTodo = (event) => {
-    const toDeleteTodo = event.target.parentElement;
-    console.log(toDeleteTodo);
+    const toDeleteTodo = event.target.parentElement.parentElement;
     const toDeleteCardId = toDeleteTodo.parentElement.parentElement.id;
-    console.log(toDeleteCardId);
     //1. 해당 부모 card 선택
     let toDeleteTodoCard = cards.filter(card => card.id === parseInt(toDeleteCardId))[0];
     toDeleteTodo.remove(); 
@@ -96,20 +94,37 @@ const deleteTodo = (event) => {
     saveCard(cards);
 }
 
+const CheckTodo = (event) => {
+    const toCheckTodo = event.target.parentElement.parentElement;
+    const toDoText = toCheckTodo.firstChild;
+    toDoText.classList.toggle("checked");
+}
+
 const paintTodo = (newTodoObj) => {
     const parentCard = document.getElementById(newTodoObj.parent);
     const cardUl = parentCard.getElementsByTagName("ul")[0];
     const li = document.createElement("li");
     li.id = newTodoObj.id;
     const span = document.createElement("span");
-    const button = document.createElement("button");
+    
+    const buttonDiv = document.createElement("div");
+    buttonDiv.id = "todo-button-content";
 
-    button.innerText = "🗑"
-    button.addEventListener("click", deleteTodo);
+    const Cbutton = document.createElement("button");
+    const Dbutton = document.createElement("button");
+
+    Cbutton.innerText = "✔"
+    Cbutton.addEventListener("click", CheckTodo);
+
+    Dbutton.innerText = "🗑"
+    Dbutton.addEventListener("click", deleteTodo);
+
     span.innerText = newTodoObj.text;
+    buttonDiv.appendChild(Cbutton);
+    buttonDiv.appendChild(Dbutton);
 
     li.appendChild(span);
-    li.appendChild(button);
+    li.appendChild(buttonDiv);
     cardUl.appendChild(li);
 }
 

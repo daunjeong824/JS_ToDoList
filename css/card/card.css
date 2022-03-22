@@ -111,7 +111,7 @@
     justify-content: space-between;
     width: 231px;
     height: 30px;
-    padding: 4px 2px;
+    padding: 4px 4px;
     border: solid 2px;
     border-radius: 10px;
     margin-bottom: 16px;
@@ -120,6 +120,25 @@
 
 .card li span {
     line-height: 1;
+}
+
+#todo-button-content {
+    width: 55px;
+    display: flex;
+    justify-content: space-between;
+}
+#todo-button-content button {
+    display: block;
+    border: none;
+    border-radius: 50%;
+    background-color: rgb(180, 180, 180);
+    cursor: pointer;
+}
+#todo-button-content button:hover {
+    transform: scale(1.1);
+}
+#todo-button-content button:active {
+    transform: scale(0.9);
 }
 
 /* To Add Card */
@@ -154,4 +173,10 @@
     background-position: center center;
 
     cursor: pointer;
+}
+
+/* Conditional Style */
+.checked {
+    color:#4d4c4c;
+    text-decoration: line-through;
 }
