@@ -30,13 +30,11 @@ const paintCard = (newCardObj) => {
     const div = document.createElement("div");
     div.id = newCardObj.id;
     const deleteButton = document.createElement("button");
-    
     /* Card */
     div.classList.add("card");
     deleteButton.classList.add("delete-button");
     div.appendChild(deleteButton);
     deleteButton.addEventListener("click", deleteCard);
-
     /* Card Form */
     const cardForm = document.createElement("form");
     const cardFormInput = document.createElement("input");
@@ -46,11 +44,9 @@ const paintCard = (newCardObj) => {
     cardForm.appendChild(cardFormInput);
     div.appendChild(cardForm);
     cardForm.addEventListener("submit",handleTodo);
-    
     /* Card Todo-list */
     const ul = document.createElement("ul");
     div.appendChild(ul);
-
     /* Card insert */
     cardList.insertBefore(div, toAddCard);
 }
@@ -71,7 +67,8 @@ const handleTodo = (event) => {
     newTodoObj = {
         text: newTodo,
         parent: toPutCardCount,
-        id: Date.now()
+        id: Date.now(),
+        isChecked: false,
     }
     let gotchaCard = cards.filter(card => card.id === parseInt(toPutCardCount))[0];
     gotchaCard.todo[gotchaCard.todo.length] = newTodoObj;
@@ -96,8 +93,21 @@ const deleteTodo = (event) => {
 
 const CheckTodo = (event) => {
     const toCheckTodo = event.target.parentElement.parentElement;
+    const toCheckTodoCardId = toCheckTodo.parentElement.parentElement.id;
+    //1. 부모 card 택
+    let toCheckTodoCard = cards.filter(card => card.id === parseInt(toCheckTodoCardId))[0];
+    //2. check할 todo의 객체 인덱스를 부모 card todo 배열에서 get
+    let toCheckTodoObjIndex = toCheckTodoCard.todo.findIndex(todo => todo.id === parseInt(toCheckTodo.id));
+    //3. 해당 객체의 isCheck 속성을 change
+    toCheckTodoCard.todo[toCheckTodoObjIndex].isChecked = !toCheckTodoCard.todo[toCheckTodoObjIndex].isChecked;
+    //4. 부모 card를 id 통해 cards로 갱신
+    const cardIndex = cards.findIndex((card => card.id === parseInt(toCheckTodoCard.id)));
+    cards[cardIndex] = toCheckTodoCard;
+
     const toDoText = toCheckTodo.firstChild;
     toDoText.classList.toggle("checked");
+
+    saveCard(cards);
 }
 
 const paintTodo = (newTodoObj) => {
@@ -120,6 +130,7 @@ const paintTodo = (newTodoObj) => {
     Dbutton.addEventListener("click", deleteTodo);
 
     span.innerText = newTodoObj.text;
+    if(newTodoObj.isChecked) { span.classList.add("checked"); }
     buttonDiv.appendChild(Cbutton);
     buttonDiv.appendChild(Dbutton);
 
