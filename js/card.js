@@ -138,7 +138,19 @@ const paintTodo = (newTodoObj) => {
     li.appendChild(buttonDiv);
     cardUl.appendChild(li);
 }
+/* Reset */
+const resetButton = document.querySelector("#reset-button");
 
+const onReset = () => {
+    cards = [];
+    count = 0;
+    saveCard(cards);
+    localStorage.setItem(COUNT_KEY, count);
+    location.reload();
+    };
+
+/* Global scope EventListen */
+resetButton.addEventListener("click", onReset);
 toAddCard.addEventListener("click", makeCard);
 /* Load Cards & count */
 const savedCards = localStorage.getItem(CARDS_KEY);
